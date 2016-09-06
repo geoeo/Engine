@@ -1,0 +1,46 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\author{Christoph Körner, 0726266, 932, ofice@chaosmail.at\\Marc Haubenstock 1525175, 932, marc.dhaubenstock@gmail.com}
+\title{186.140 Real-time Rendering\\Read Me}
+\begin{document}
+\maketitle
+
+\section{Read Me}
+
+\subsection{Controls}
+
+\begin{itemize}
+\item Left Shift - Rotate Camera with Mouse
+\item W,A,S,D - Forward,Left,Back,Right Respectively
+\item R - Reset Camera
+\item M - Toggle Wireframe
+\end{itemize} 
+
+\section{Technologies}
+
+For the implementation of our project, we use \textit{C++}, \textit{OpenGL 4}, and additional helper tools such as \textit{Eigen} for linear algebra, \textit{OpenGP} for geometry processing, \textit{GLFW} for windows and inputs , \textit{GLEW} for extensions and \textit{SOIL} for textures. In addition, we are developing a Three.js-like framework for C++ called \textit{ThreeC++} in the branch \textsf{feat/threecpp}. We will use it in the second stage for abstractions of scene, camera, meshes, geometry and materials in order to allow easy composition of elements and effects in the scene.
+
+\section{Effects}
+
+\subsection{Skybox}
+
+Our engine features a skybox with a texture taken from \newline
+http://www.custommapmakers.org/skyboxes.php
+
+\subsection{Billboarding}
+
+Above the location of the camera there are two plane primitives with cloud textures.
+These use a simple view oriented billboarding. 
+
+\subsection{Water W.I.P}
+To the bottom right of the camera spawn there is a tile with a simple reflection shader. This will be our water.
+
+Of course all textures a subject to change.
+
+\end{document}

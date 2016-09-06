@@ -1,0 +1,98 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\author{Christoph Körner, 0726266, 932, ofice@chaosmail.at\\Marc Haubenstock 1525175, 932, marc.dhaubenstock@gmail.com}
+\title{186.140 Real-time Rendering\\Project Proposal}
+\begin{document}
+\maketitle
+
+\section{Treatment}
+
+The camera slowly enters the scene through a layer of clouds, seeing a wide terrain with water. After hovering around mountains, the camera makes its way towards the environment's surface. Slowly passing through the vegetation we make our way towards the water. 
+
+We inspect the water's surface trying to discern what lies beneath it. Diving into it, we display the local plant life. Diving deeper we see a silhouette of a distance object. Finally we are able to identify our target: A shipwreck lying on the bottom of the ocean.  
+
+\section{Effects}
+
+\subsection{Lighting and Shading}
+
+All elements in the scene will use the Phong Reflection Model and Phong Shading \cite{phong73}.
+
+\subsection{Infinite Procedural Terrain}
+
+To create a realistic procedural terrain, we will combine different noise functions \cite{ebert03}, such as Perlin noise, fractal Brownian motion, multi-fractals and hybrid models \cite{musgrave94}. 
+
+We will render the noise function as a grayscale image into a buffer and use it to apply it to the ground surface as a displacement map \cite{moeller08}. Then, we will apply texture mapping \cite{shirly09} to different heights of the terrain \cite{ebert03}.
+
+The terrain should be rendered with higher details for regions closer to the camera, and less details for regions that are further away. We will use adaptive Tessellation \cite{tessellation} to implement this effect directly on the GPU.
+
+If there is still time left, we would like to implement erosion \cite{olsen04} in order to imitate the effect of realistic physical processes (such as wind, weather or water) and to create a more plausible terrain.
+
+\subsection{Shadows}
+
+All elements in the scene should use soft shadows using depth maps \cite{segal92} and percentage closer filtering \cite{reeves87}.
+
+\subsection{Water}
+
+The water will be created from a simple surface geometry. It should show reflection and refraction effects depending on the camera angel \cite{water-tutorial}. In addition, we want to use bump mapping for plausible lighting \cite{ebert03} effects. 
+
+If there is still time left, we would like to include a wave model based on the frequency spectrum of real oceans \cite{tessendorf01}.
+
+\subsection{Sky and Clouds}
+
+The Sky will be model as a Skybox \cite{skybox} with additional billyboard-style clouds \cite{moeller08}.
+
+\subsection{Trees and Vegetation}
+
+We will cover the terrain with vegetation whose geometry is created with 3-dimensional L-Systems \cite{ebert03}. In addition, we will use texture mapping and displacement mapping to create realistic vegetation \cite{shirly09}.
+
+\section{Technologies}
+
+For the implementation of our project, we will use \textit{C++}, \textit{OpenGL 4}, and additional helper tools such as \textit{Eigen} for linear algebra, \textit{OpenGP} for geometry processing, \textit{GLFW} for windows and inputs and \textit{GLEW} for extensions. In addition, we will use a small self-written object and geometry wrapper.
+
+\begin{thebibliography}{9}
+
+\bibitem{ebert03}
+  Ebert, David S. \emph{Texturing \& modeling: a procedural approach.} Morgan Kaufmann, 2003.
+
+\bibitem{moeller08}
+  Akenine-Möller, Tomas, Eric Haines, and Naty Hoffman. \emph{Real-time rendering.} CRC Press, 2008.
+
+\bibitem{musgrave94}
+  Musgrave, F. Kenton. \emph{Procedural fractal terrains.} Texturing and Modelling. A Procedural approach, 1994.
+
+\bibitem{olsen04}
+  Olsen, Jacob. \emph{Realtime Procedural Terrain Generation} 2004.
+
+\bibitem{reeves87}  
+  Reeves, William T., David H. Salesin, and Robert L. Cook. \emph{Rendering antialiased shadows with depth maps.} ACM Siggraph Computer Graphics. Vol. 21. No. 4. ACM, 1987.
+
+\bibitem{segal92}
+  Segal, Mark, et al. \emph{Fast shadows and lighting effects using texture mapping.} ACM Siggraph Computer Graphics. Vol. 26. No. 2. ACM, 1992.
+
+\bibitem{shirly09}
+  Shirley, Peter, Michael Ashikhmin, and Steve Marschner. \emph{Fundamentals of computer graphics.} CRC Press, 2009.
+
+\bibitem{phong73}
+  Phong, Bui Tuong. \emph{Illumination for Computer-generated Images.} AAI7402100, The University of Utah, 1973
+
+\bibitem{tessendorf01}
+  Tessendorf, Jerry. \emph{Simulating ocean water.} Simulating Nature: Realistic and Interactive Techniques. Siggraph 1.2, 2001
+
+\bibitem{water-tutorial}
+  http://blog.bonzaisoftware.com/tnp/gl-water-tutorial/
+
+\bibitem{skybox}
+  http://learnopengl.com/\#!Advanced-OpenGL/Cubemaps
+
+\bibitem{tessellation}
+  http://codeflow.org/entries/2010/nov/07/opengl-4-tessellation/
+
+\end{thebibliography}
+
+\end{document}
