@@ -6,5 +6,5 @@ Cloud::Cloud()
 }
 
 Cloud::~Cloud() {
-  glDeleteTextures(1, &(material->texture));
+	glDeleteTextures(1, &(meshes[0]->material->texture));
 }

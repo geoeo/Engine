@@ -13,7 +13,7 @@ Blur::Blur(BufferCamera* sceneCamera)
 }
 
 Blur::~Blur() {
-  glDeleteTextures(1, &(material->texture));
+	glDeleteTextures(1, &(meshes[0]->material->texture));
 }
 
 void Blur::setup(Camera* sceneCamera,GLsizei width, GLsizei height) {
@@ -46,19 +46,22 @@ void Blur::setup(Camera* sceneCamera,GLsizei width, GLsizei height) {
 
 void Blur::draw(GLuint frameBuffer, float _time, float _effect) {
 
+	Material * mat = meshes[0]->material;
+	Geometry* geo = meshes[0]->geometry;
+
 	GLuint iterations = 20;
 	for (GLuint i = 0; i < iterations; i++) {
-		glUseProgram(material->id);
+		glUseProgram(mat->id);
 		glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[horizontal]);
-		glUniform1i(glGetUniformLocation(material->id, "horizontal"), horizontal);
+		glUniform1i(glGetUniformLocation(mat->id, "horizontal"), horizontal);
 		// bind texture of other framebuffer (or scene if first iteration)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, i == 0 ? _sceneCamera->texture2: blurColorbuffers[!horizontal]);
-		glUniform1i(glGetUniformLocation(material->id, "textureSampler"), 0);
+		glUniform1i(glGetUniformLocation(mat->id, "textureSampler"), 0);
 
-		glBindVertexArray(material->vertexArrayObject);
+		glBindVertexArray(mat->vertexArrayObject);
 
-		glDrawArrays(geometry->getDrawMode(), 0, geometry->getNumVertices());
+		glDrawArrays(geo->getDrawMode(), 0, geo->getNumVertices());
 
 		glBindVertexArray(CLEAR);
 

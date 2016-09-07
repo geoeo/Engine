@@ -26,7 +26,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   }
   else {
     printf("=====> Render: Displacement => Heightmap\n");
-    //heightmap->add(displacement);
+    heightmap->add(displacement);
   }
   /* HEIGHT MAP: END */
 
@@ -56,12 +56,12 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   TerrainShadow* shadow = new TerrainShadow(camera, light);
   shadow->translate(0.0, -5.0, 0.0);
   shadow->scale(200);
-  //heightmap->add(shadow->heightMapBuffer);
-  //window->registerBuffer(shadow->heightMapBuffer);
+  heightmap->add(shadow->heightMapBuffer);
+  window->registerBuffer(shadow->heightMapBuffer);
 
   if (DEBUG == DEBUG_SHADOWMAP) {
     printf("=====> Render: TerrainShadow => Scene\n");
-    //scene->add(shadow);
+    scene->add(shadow);
   }
   else {
     printf("=====> Render: TerrainShadow => Shadowmap\n");
@@ -82,8 +82,8 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
     window->registerBuffer(terrain->heightMapBuffer);
     //printf("=====> Buffer: Shadowmap => Terrain::shadowMapBuffer\n");
     shadowmap->add(terrain->shadowMapBuffer);
-	//window->registerBuffer(terrain->shadowMapBuffer);
-    // window->registerCamera(terrain->shadowMapBuffer);
+	window->registerBuffer(terrain->shadowMapBuffer);
+     window->registerCamera(terrain->shadowMapBuffer);
     //printf("=====> Render: Terrain => Scene\n");
     //scene->add(terrain);
   }
@@ -106,7 +106,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   if (DEBUG == DEBUG_TERRAIN || !DEBUG){
     printf("=====> Buffer: Shadowmap => Water::shadowMapBuffer\n");
     shadowmap->add(water->shadowMapBuffer);
-	//window->registerBuffer(terrain->shadowMapBuffer);
+	window->registerBuffer(terrain->shadowMapBuffer);
     printf("=====> Render: Water => Scene\n");
     scene->add(water);
   }
@@ -114,19 +114,18 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   /* TERRAIN: END */
 
   Model* box = new Model(new BoxIndicesGeometry(), new Material(_simple_vshader, _simple_fshader, NULL));
-  box->resetTranslation();
   //scene->add(box);
 
   string path = __DIR__ + string("meshes/nanosuit2.obj");
-  Model* obj = new Model(path);
+  //Model* obj = new Model(path);
   //obj->resetTranslation();
   //obj->scale(.1);
-  scene->add(obj);
+  //scene->add(obj);
 
   string path_2 = __DIR__ + string("meshes/Shark.obj");
-  Model* shark = new Model(path_2);
-  shark->translate(20, 0, 0);
-  scene->add(shark);
+  //Model* shark = new Model(path_2);
+  //shark->translate(20, 0, 0);
+  //scene->add(shark);
 
   // Cloud* cloud1 = new Cloud();
   // cloud1->scale(100, 1, 50);

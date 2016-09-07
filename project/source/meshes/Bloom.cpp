@@ -26,23 +26,25 @@ void Bloom::setup(Camera* sceneCamera, GLsizei width, GLsizei height) {
 
 void Bloom::draw(GLuint frameBuffer, float _time, float _effect) {
 
+	Material * mat = meshes[0]->material;
+	Geometry* geo = meshes[0]->geometry;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Blend scene and blur texture
-	glUseProgram(material->id);
+	glUseProgram(mat->id);
 	// Set our "scene" sampler to user Texture Unit 0 
-	glUniform1i(glGetUniformLocation(material->id, "scene"), 0);
-	glUniform1i(glGetUniformLocation(material->id, "bloomBlur"), 1);
+	glUniform1i(glGetUniformLocation(mat->id, "scene"), 0);
+	glUniform1i(glGetUniformLocation(mat->id, "bloomBlur"), 1);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _sceneCamera->texture);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, _blurMesh->blurColorbuffers[!_blurMesh->horizontal]);
 
-	glBindVertexArray(material->vertexArrayObject);
+	glBindVertexArray(mat->vertexArrayObject);
 
-	glDrawArrays(geometry->getDrawMode(), 0, geometry->getNumVertices());
+	glDrawArrays(geo->getDrawMode(), 0, geo->getNumVertices());
 
 	glBindVertexArray(CLEAR);
 

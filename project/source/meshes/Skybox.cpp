@@ -13,11 +13,14 @@ Skybox::Skybox()
 }
 
 void Skybox::setup(){
-  // TODO: We need to refactor this, it's not DRY
-  glUseProgram(material->id);
 
-  glGenVertexArrays(1, &(material->vertexArrayObject));
-  glBindVertexArray(material->vertexArrayObject);
+	Material* mat = meshes[0]->material;
+	Geometry* geo = meshes[0]->geometry;
+  // TODO: We need to refactor this, it's not DRY
+  glUseProgram(mat->id);
+
+  glGenVertexArrays(1, &(mat->vertexArrayObject));
+  glBindVertexArray(mat->vertexArrayObject);
 
   checkGLErrors("SKYBOX_MATERIAL::CompileAndLinkShaders", "AFTER vertexArrayObject");
 
@@ -27,16 +30,16 @@ void Skybox::setup(){
   glGenBuffers(1, &vertexBufferObject);
   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 
-  glBufferData(GL_ARRAY_BUFFER, geometry->getNumVertices() * sizeof(vec3), geometry->getVertices(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, geo->getNumVertices() * sizeof(vec3), geo->getVertices(), GL_STATIC_DRAW);
 
-  if (geometry->getNumIndices() > 0){
+  if (meshes[0]->geometry->getNumIndices() > 0){
 
 	  GLuint elementBufferObject;
 
 	  glGenBuffers(ONE, &elementBufferObject);
 	  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
-	  glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometry->getNumIndices() * sizeof(GLuint),
-		  geometry->getIndices(), GL_STATIC_DRAW);
+	  glBufferData(GL_ELEMENT_ARRAY_BUFFER, geo->getNumIndices() * sizeof(GLuint),
+		  geo->getIndices(), GL_STATIC_DRAW);
 
 	  checkGLErrors("MATERIAL::CompileShaders", "AFTER elementBufferObject");
   }
@@ -60,19 +63,22 @@ void Skybox::setup(){
 }
 
 void Skybox::draw(GLuint frameBuffer, float _time, float _effect){
-	glDepthMask(GL_FALSE);
-	glUseProgram(material->id);
+	Material* mat = meshes[0]->material;
+	Geometry* geo = meshes[0]->geometry;
 
-	glUniform1f(glGetUniformLocation(material->id, "time"), _time);
+	glDepthMask(GL_FALSE);
+	glUseProgram(mat->id);
+
+	glUniform1f(glGetUniformLocation(mat->id, "time"), _time);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-	glBindVertexArray(material->vertexArrayObject);
+	glBindVertexArray(mat->vertexArrayObject);
 
-	if (geometry->getNumIndices() > 0)
-		glDrawElements(geometry->getDrawMode(), geometry->getNumIndices(), GL_UNSIGNED_INT, 0);
+	if (geo->getNumIndices() > 0)
+		glDrawElements(geo->getDrawMode(), geo->getNumIndices(), GL_UNSIGNED_INT, 0);
 	else
-		glDrawArrays(geometry->getDrawMode(), 0, geometry->getNumVertices());
+		glDrawArrays(geo->getDrawMode(), 0, geo->getNumVertices());
 
 	glBindVertexArray(CLEAR);
 	glUseProgram(CLEAR);
@@ -86,7 +92,7 @@ void Skybox::draw(GLuint frameBuffer, float _time, float _effect){
 // @src: http://www.antongerdelan.net/opengl/cubemaps.html
 void Skybox::createCubeMap(const char* front, const char* back, const char* top, const char*bottom, const char* left, const char*right){
 
-  glGenTextures(ONE, &(material->texture));
+	glGenTextures(ONE, &(meshes[0]->material->texture));
 
   loadCubeMapSide(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
   loadCubeMapSide(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
@@ -107,7 +113,7 @@ void Skybox::createCubeMap(const char* front, const char* back, const char* top,
 void Skybox::loadCubeMapSide(GLenum side_target, const char* fileName){
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, material->texture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, meshes[0]->material->texture);
 
   int width, height, n;
 
@@ -123,14 +129,15 @@ Skybox::~Skybox(){
 }
 
 void Skybox::setData(){
-  glUseProgram(material->id);
+	Material* mat = meshes[0]->material;
+	glUseProgram(mat->id);
 
   // Bind the material as texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, material->texture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, mat->texture);
 
   // Link material texture attribute
-  glUniform1i(glGetUniformLocation(material->id, "cubeSampler"), 0);
+  glUniform1i(glGetUniformLocation(mat->id, "cubeSampler"), 0);
 
   //glBindTexture(GL_TEXTURE_CUBE_MAP, CLEAR);
   glUseProgram(CLEAR);

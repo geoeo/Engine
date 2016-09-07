@@ -56,16 +56,19 @@ void Scene::update(const Event& e) {
     // Render the meshes of the Scene
 	for (unsigned i = 0; i < models.size(); i++) {
 		if (models[i]->isTexture == false) {
-			setData(models[i]->material->id);
-			buffers[b]->setData(models[i]->material->id);
-			models[i]->material->setMVP(models[i]->model, buffers[b]->model, buffers[b]->view, buffers[b]->projection);
 			models[i]->setData();
+			for each (Mesh* mesh in models[i]->meshes)
+			{
+				setData(mesh->material->id);
+				buffers[b]->setData(mesh->material->id);
+				mesh->material->setMVP(models[i]->model, buffers[b]->model, buffers[b]->view, buffers[b]->projection);
 
-			// Set the light information
-			for (unsigned l=0; l < lights.size(); l++) {
-				lights[l]->setData(models[i]->material->id);
+				// Set the light information
+				for (unsigned l = 0; l < lights.size(); l++) {
+					lights[l]->setData(models[i]->meshes[0]->material->id);
+				}
+				mesh->draw(buffers[b]->frameBuffer, currentTime, buffers[b]->effect_roll);
 			}
-			models[i]->draw(buffers[b]->frameBuffer, currentTime, buffers[b]->effect_roll);
       }
     }
 
@@ -84,17 +87,20 @@ void Scene::update(const Event& e) {
 
     // Render the meshes of the Scene
 	for (unsigned i = 0; i < models.size(); i++) {
-	  setData(models[i]->material->id);
-	  cameras[c]->setData(models[i]->material->id);
-	  models[i]->material->setMVP(models[i]->model, cameras[c]->model, cameras[c]->view, cameras[c]->projection);
-	  models[i]->setData();
+		models[i]->setData();
 
-      // Set the light information
-      for (unsigned l=0; l < lights.size(); l++) {
-		 lights[l]->setData(models[i]->material->id);
-      }
-	  models[i]->draw(cameras[c]->frameBuffer, currentTime, 0.0/* cameras[i]->effect_roll*/);
+		for each (Mesh* mesh in models[i]->meshes)
+		{
+			setData(mesh->material->id);
+			cameras[c]->setData(mesh->material->id);
+			mesh->material->setMVP(models[i]->model, cameras[c]->model, cameras[c]->view, cameras[c]->projection);
 
+			// Set the light information
+			for (unsigned l = 0; l < lights.size(); l++) {
+				lights[l]->setData(mesh->material->id);
+			}
+			mesh->draw(cameras[c]->frameBuffer, currentTime, 0.0/* cameras[i]->effect_roll*/);
+		}
     }
 
     // Check for error which occurred during the scene rendering
@@ -108,7 +114,10 @@ void Scene::update(const Event& e) {
 
 	  // Render the postProcess of the Scene
 	  for (unsigned i = 0; i < postProcess.size(); i++) {
-		  postProcess[i]->material->setMVP(postProcess[i]->model, postProcess[i]->model, postProcess[i]->model, postProcess[i]->model);
+		  for each (Mesh* mesh in postProcess[i]->meshes)
+		  {
+			  mesh->material->setMVP(postProcess[i]->model, postProcess[i]->model, postProcess[i]->model, postProcess[i]->model);
+		  }
 		  postProcess[i]->setData();
 		  postProcess[i]->draw(0, currentTime);
 	  }

@@ -1,19 +1,13 @@
 #pragma once
 
 #include "common.h"
-#include "Object.h"
 #include "Materials.h"
 #include "Geometries.h"
 #include "Mesh.h"
 
-class Model: public Object {
-
-protected:
-  void setup();
+class Model : public Object {
 
 public:
-  Geometry* geometry;
-  Material* material;
   vector<Mesh*> meshes;
 
   bool isTexture = false;

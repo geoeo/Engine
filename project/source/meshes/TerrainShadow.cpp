@@ -17,16 +17,17 @@ TerrainShadow::~TerrainShadow() {
 }
 
 void TerrainShadow::setData(){
-  glUseProgram(material->id);
+  GLuint program = meshes[0]->material->id;
+  glUseProgram(program);
 
   // Bind the material as texture
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, heightMapBuffer->texture);
 
   // Link material texture attribute
-  glUniform1i(glGetUniformLocation(material->id, "heightMap"), 0);
+  glUniform1i(glGetUniformLocation(program, "heightMap"), 0);
 
-  GLuint lightMvpID = glGetUniformLocation(material->id, "lightMVP");
+  GLuint lightMvpID = glGetUniformLocation(program, "lightMVP");
   glUniformMatrix4fv(lightMvpID, ONE, DONT_TRANSPOSE, light->getMVP().data());
 
   glUseProgram(CLEAR);
