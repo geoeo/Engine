@@ -1,6 +1,6 @@
 #version 430 core
 
-in vec3 fragUV;
+in vec2 fragUV;
 
 uniform sampler2D textureSampler;
 
@@ -11,7 +11,7 @@ out vec4 outColor;
 
 void main() {
 
-  outColor = texture(textureSampler, fragUV.xy);
+  outColor = texture(textureSampler, fragUV);
   FragColor = outColor;
   BrightColor = vec4(0,0,0,1);
 }

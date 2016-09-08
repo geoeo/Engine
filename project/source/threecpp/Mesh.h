@@ -7,6 +7,9 @@
 
 class Mesh : public Object {
 
+private:
+	bool shouldSetDataVal;
+
 protected:
   void setup();
 
@@ -16,7 +19,7 @@ public:
 
 
   // Constructor
-  Mesh(Geometry*, Material*);
+  Mesh(Geometry*, Material*, bool _shouldSetData = false);
 //  Model(string pathToMesh);
 
   // Destructor
@@ -24,10 +27,7 @@ public:
 
   virtual void draw(GLuint frameBuffer = 0, float _time = 0, float _effect = 0);
   virtual void setData();
-//  void loadModel(string path);
-//  void processNode(aiNode* node, const aiScene* scene, vector<vec3>* verticies, vector<vec3>* normals, vector<vec3>* tangent,
-//	  vector <vec3>* biTangent, vector<vec2>* textureCoordiantes, vector<GLuint>* indices, Geometry* g);
-//  void generateGeometry(aiMesh* mesh, const aiScene* scene, vector<vec3>* verticies, vector<vec3>* normals, vector<vec3>* tangent,
-//	  vector <vec3>* biTangent, vector<vec2>* textureCoordiantes, vector<GLuint>* indices, Geometry* g);
-// 
+  void setImportedTextures();
+  bool shouldSetData(){ return shouldSetDataVal; }
+ 
 };

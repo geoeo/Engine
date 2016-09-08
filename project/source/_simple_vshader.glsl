@@ -6,13 +6,13 @@ layout(location = 2) in vec2 vertexUV;
 
 uniform mat4 model, view, projection;
 
-//out vec2 fragUV;
-out vec3 fragUV;
+out vec2 fragUV;
+//out vec3 fragUV;
 
 void main(){
 
-  //fragUV = vertexUV;
-    fragUV = vertexPosition;
+  fragUV = vertexUV;
+  //fragUV = vertexPosition;
 
   gl_Position = projection * view * model * vec4(vertexPosition, 1.0);
 }

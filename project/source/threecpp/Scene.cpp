@@ -56,7 +56,8 @@ void Scene::update(const Event& e) {
     // Render the meshes of the Scene
 	for (unsigned i = 0; i < models.size(); i++) {
 		if (models[i]->isTexture == false) {
-			models[i]->setData();
+			if (models[i]->shouldSetData())
+				models[i]->setData();
 			for each (Mesh* mesh in models[i]->meshes)
 			{
 				setData(mesh->material->id);
@@ -65,8 +66,12 @@ void Scene::update(const Event& e) {
 
 				// Set the light information
 				for (unsigned l = 0; l < lights.size(); l++) {
-					lights[l]->setData(models[i]->meshes[0]->material->id);
+					lights[l]->setData(mesh->material->id);
 				}
+				// if mesh is imported we have to set textures for each child mesh before the draw call
+				if (mesh->shouldSetData())
+					mesh->setData();
+
 				mesh->draw(buffers[b]->frameBuffer, currentTime, buffers[b]->effect_roll);
 			}
       }
@@ -87,7 +92,8 @@ void Scene::update(const Event& e) {
 
     // Render the meshes of the Scene
 	for (unsigned i = 0; i < models.size(); i++) {
-		models[i]->setData();
+		if (models[i]->shouldSetData())
+			models[i]->setData();
 
 		for each (Mesh* mesh in models[i]->meshes)
 		{
@@ -99,6 +105,9 @@ void Scene::update(const Event& e) {
 			for (unsigned l = 0; l < lights.size(); l++) {
 				lights[l]->setData(mesh->material->id);
 			}
+			if (mesh->shouldSetData())
+				mesh->setData();
+
 			mesh->draw(cameras[c]->frameBuffer, currentTime, 0.0/* cameras[i]->effect_roll*/);
 		}
     }

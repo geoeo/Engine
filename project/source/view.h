@@ -61,7 +61,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
 
   if (DEBUG == DEBUG_SHADOWMAP) {
     printf("=====> Render: TerrainShadow => Scene\n");
-    scene->add(shadow);
+    //scene->add(shadow);
   }
   else {
     printf("=====> Render: TerrainShadow => Shadowmap\n");
@@ -85,7 +85,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
 	window->registerBuffer(terrain->shadowMapBuffer);
      window->registerCamera(terrain->shadowMapBuffer);
     //printf("=====> Render: Terrain => Scene\n");
-    //scene->add(terrain);
+    scene->add(terrain);
   }
 
   shadow->heightMapBuffer = terrain->heightMapBuffer;
@@ -116,11 +116,12 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   Model* box = new Model(new BoxIndicesGeometry(), new Material(_simple_vshader, _simple_fshader, NULL));
   //scene->add(box);
 
-  string path = __DIR__ + string("meshes/nanosuit2.obj");
-  //Model* obj = new Model(path);
+  string path = __DIR__ + string("resources/nanosuit/nanosuit.obj");
+  Model* obj = new Model(path);
   //obj->resetTranslation();
   //obj->scale(.1);
-  //scene->add(obj);
+  obj->translate(0, 50, 0);
+  scene->add(obj);
 
   string path_2 = __DIR__ + string("meshes/Shark.obj");
   //Model* shark = new Model(path_2);

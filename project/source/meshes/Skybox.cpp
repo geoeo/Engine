@@ -3,9 +3,6 @@
 #include "_texture_vshader.h"
 #include "_texture_3d_fshader.h"
 
-#include "_simple_fshader.h"
-#include "_simple_vshader.h"
-
 Skybox::Skybox()
 	: Model(new BoxIndicesGeometry(), new Material(_texture_vshader, _texture_3d_fshader, NULL)) {
 

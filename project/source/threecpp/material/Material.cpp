@@ -49,7 +49,7 @@ GLuint Material::loadTexture(const char* fileName, bool isDepth, GLenum edge){
   glTexImage2D(
     GL_TEXTURE_2D,
     0,
-    (isDepth ? GL_DEPTH_COMPONENT32 : GL_RGBA),
+	(isDepth ? GL_DEPTH_COMPONENT32 : GL_RGB),
     width,
     height,
     0,
@@ -71,12 +71,16 @@ GLuint Material::loadTexture(const char* fileName, bool isDepth, GLenum edge){
     glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
   }
   else {
+	glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glGenerateMipmap(GL_TEXTURE_2D);
+
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, edge);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, edge);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   }
 
   // Error Handling
