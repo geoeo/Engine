@@ -8,5 +8,5 @@ Displacement::Displacement()
 }
 
 Displacement::~Displacement() {
-	glDeleteTextures(1, &(meshes[0]->material->texture));
+	glDeleteTextures(1, meshes[0]->material->textures);
 }

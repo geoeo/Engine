@@ -8,7 +8,7 @@ Mirror::Mirror(PerspectiveCamera* camera)
 
   reflection = BufferCamera::fromCamera(camera,false);
   reflection->createFrameBuffer(1024, 768);
-  meshes[0]->material->texture = reflection->texture;
+  meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = reflection->texture;
   isTexture = true;
 }
 

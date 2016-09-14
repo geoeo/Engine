@@ -126,21 +126,25 @@ Mesh* Model::generateMesh(aiMesh* mesh, const aiScene* scene){
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* meshMat = scene->mMaterials[mesh->mMaterialIndex];
-		//vector<Texture> diffuseMaps = this->loadMaterialTextures(material,
-		//	aiTextureType_DIFFUSE, "texture_diffuse");
-		//textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		//vector<Texture> specularMaps = this->loadMaterialTextures(material,
-		//	aiTextureType_SPECULAR, "texture_specular");
-		//textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		aiTextureType type = aiTextureType_DIFFUSE;
-		for (GLuint i = 0; i < meshMat->GetTextureCount(type); i++)
-		{
+		//for (GLuint i = 0; i < meshMat->GetTextureCount(type); i++)
+		//{
 			aiString str;
-			meshMat->GetTexture(type, i, &str);
+			meshMat->GetTexture(type, 0, &str);
 			string path = __DIR__ + string("resources/nanosuit/") + str.C_Str();
-			material->texture = Material::loadTexture(path.c_str(),false,GL_REPEAT);
+			material->textures[Material::DIFFUSE_TEXTURE_INDEX] = Material::loadTexture(path.c_str(), false, GL_REPEAT);
 		
-		}
+		//}
+
+			type = aiTextureType_SPECULAR;
+			meshMat->GetTexture(type, 0, &str);
+			path = __DIR__ + string("resources/nanosuit/") + str.C_Str();
+			material->textures[Material::SPECULAR_TEXTURE_INDEX] = Material::loadTexture(path.c_str(), false, GL_REPEAT);
+
+			type = aiTextureType_NORMALS;
+			meshMat->GetTexture(type, 0, &str);
+			path = __DIR__ + string("resources/nanosuit/") + str.C_Str();
+			material->textures[Material::NORMAL_TEXTURE_INDEX] = Material::loadTexture(path.c_str(), false, GL_REPEAT);
 	}
 
 	return new Mesh(new Geometry(verticies,normals,tangents,biTangents,textureCoordiantes,indices), material,true);

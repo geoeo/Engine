@@ -3,6 +3,7 @@
 Material::Material(const char* vertexShader, const char* fragmentShader, const char* geometryShader){
 
   id = compile_shaders(vertexShader, fragmentShader, geometryShader);
+  textures = new GLuint[NUMBER_OF_SUPPORTED_TEXTURES];
 
   if (!id) {
     // TODO: Would be great to have some proper error handling here

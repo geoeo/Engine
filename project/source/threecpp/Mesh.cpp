@@ -156,10 +156,20 @@ void Mesh::setData(){
 
   // Bind the material as texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, material->texture);
+  glBindTexture(GL_TEXTURE_2D, material->textures[Material::DIFFUSE_TEXTURE_INDEX]);
 
   // Link material texture attribute
-  glUniform1i(glGetUniformLocation(material->id, "textureSampler"), 0);
+  glUniform1i(glGetUniformLocation(material->id, "textureSamplerDiffuse"), 0);
+
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, material->textures[Material::SPECULAR_TEXTURE_INDEX]);
+
+  glUniform1i(glGetUniformLocation(material->id, "textureSamplerSpecular"), 1);
+
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, material->textures[Material::NORMAL_TEXTURE_INDEX]);
+
+  glUniform1i(glGetUniformLocation(material->id, "textureSamplerNormal"), 2);
 
   glUseProgram(CLEAR);
 }

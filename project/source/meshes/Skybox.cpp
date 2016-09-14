@@ -89,7 +89,7 @@ void Skybox::draw(GLuint frameBuffer, float _time, float _effect){
 // @src: http://www.antongerdelan.net/opengl/cubemaps.html
 void Skybox::createCubeMap(const char* front, const char* back, const char* top, const char*bottom, const char* left, const char*right){
 
-	glGenTextures(ONE, &(meshes[0]->material->texture));
+	glGenTextures(ONE, meshes[0]->material->textures);
 
   loadCubeMapSide(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, front);
   loadCubeMapSide(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, back);
@@ -110,7 +110,7 @@ void Skybox::createCubeMap(const char* front, const char* back, const char* top,
 void Skybox::loadCubeMapSide(GLenum side_target, const char* fileName){
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, meshes[0]->material->texture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX]);
 
   int width, height, n;
 
@@ -131,7 +131,7 @@ void Skybox::setData(){
 
   // Bind the material as texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, mat->texture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, mat->textures[Material::DIFFUSE_TEXTURE_INDEX]);
 
   // Link material texture attribute
   glUniform1i(glGetUniformLocation(mat->id, "cubeSampler"), 0);

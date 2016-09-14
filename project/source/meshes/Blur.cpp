@@ -13,7 +13,7 @@ Blur::Blur(BufferCamera* sceneCamera)
 }
 
 Blur::~Blur() {
-	glDeleteTextures(1, &(meshes[0]->material->texture));
+	glDeleteTextures(1, meshes[0]->material->textures);
 }
 
 void Blur::setup(Camera* sceneCamera,GLsizei width, GLsizei height) {

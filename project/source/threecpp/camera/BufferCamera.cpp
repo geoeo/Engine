@@ -44,7 +44,7 @@ GLuint BufferCamera::createTexture(GLsizei width, GLsizei height, bool isDepth) 
   glTexImage2D(
     GL_TEXTURE_2D,
     0,
-    (isDepth ? GL_DEPTH_COMPONENT32F : GL_RGBA),
+    (isDepth ? GL_DEPTH_COMPONENT32F : GL_RGB),
     width,
     height,
     0,
@@ -61,8 +61,8 @@ GLuint BufferCamera::createTexture(GLsizei width, GLsizei height, bool isDepth) 
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER_ARB );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER_ARB );
 
- //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
  //   glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
   }
   else {

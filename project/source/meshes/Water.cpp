@@ -16,13 +16,13 @@ Water::Water(PerspectiveCamera* camera, Skybox* _sky)
 }
 
 Water::~Water() {
-  glDeleteTextures(1, &(meshes[0]->material->texture));
+  glDeleteTextures(1, meshes[0]->material->textures);
 }
 
 void Water::setup() {
 
 	Material* mat = meshes[0]->material;
-  mat->texture = Material::loadTexture(WAVEMAP.data(), false, GL_REPEAT);
+  mat->textures[Material::DIFFUSE_TEXTURE_INDEX] = Material::loadTexture(WAVEMAP.data(), false, GL_REPEAT);
 
   ((PhongMaterial*)mat)->setPhongReflection(
     new vec3(0.4, 0.4, 0.4),  // ambient
@@ -43,7 +43,7 @@ void Water::setData() {
 
   // Bind the material as texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, mat->texture);
+  glBindTexture(GL_TEXTURE_2D, mat->textures[Material::DIFFUSE_TEXTURE_INDEX]);
 
   // Link material texture attribute
   glUniform1i(glGetUniformLocation(mat->id, "waveMap"), 0);
@@ -57,7 +57,7 @@ void Water::setData() {
 
   // Bind shadow map as texture
   glActiveTexture(GL_TEXTURE0 + 2);
-  glBindTexture(GL_TEXTURE_CUBE_MAP, sky->meshes[0]->material->texture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, sky->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX]);
 
   // Link material texture attribute
   glUniform1i(glGetUniformLocation(mat->id, "cubeSampler"), 2);
