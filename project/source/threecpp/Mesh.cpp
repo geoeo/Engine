@@ -131,15 +131,8 @@ void Mesh::draw(GLuint frameBuffer, float _time, float _effect) {
   glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
   glBindVertexArray(material->vertexArrayObject);
 
-  if (geometry->getNumIndices() > 0){
-	  //// Bind the material as texture
-	  //glActiveTexture(GL_TEXTURE0);
-	  //glBindTexture(GL_TEXTURE_2D, material->texture);
-
-	  //// Link material texture attribute
-	  //glUniform1i(glGetUniformLocation(material->id, "textureSampler"), 0);
+  if (geometry->getNumIndices() > 0)
 	  glDrawElements(geometry->getDrawMode(), geometry->getNumIndices(), GL_UNSIGNED_INT, 0);
-  }
   else
 	glDrawArrays(geometry->getDrawMode(), 0, geometry->getNumVertices());
 

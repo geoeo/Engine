@@ -4,6 +4,9 @@
 
 Scene::Scene() {
 
+
+  debugScreen = new Model(new PlaneVert(), new Material(_simple_vshader, _texture_2d_fshader, NULL));
+
   // Create and initialize a Scene
   if (!create()) {
     fprintf(stderr, "ERROR: An error occurred while creating the scene!\n");
@@ -12,6 +15,7 @@ Scene::Scene() {
 }
 
 Scene::~Scene() {
+	debugScreen->~Model();
 
 }
 
@@ -117,7 +121,26 @@ void Scene::update(const Event& e) {
     glFlush();
   }
 
-  if (postProcess.size() > 0){
+  //DEBUG = DEBUG_SCENE;
+  if (DEBUG == DEBUG_SCENE && cameras.size() > 0){
+	  BufferCamera* cam = (BufferCamera*)cameras[0];
+	  cam->Position = vec3(0.0f, 0.0f, 1.0f);
+	  cam->update();
+	  GLuint textureToDisplay = cam->texture;
+	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;
+	  debugScreen->meshes[0]->material->setMVP(debugScreen->model, cam->model, cam->view, cam->projection);
+	  debugScreen->meshes[0]->setData();
+	  debugScreen->meshes[0]->draw(0, currentTime);
+
+	  // Check for error which occurred during the scene rendering
+	  checkGLErrors("Scene::update", "DEBUG POST LOOP");
+	  glFlush();
+  }
+
+  else if (postProcess.size() > 0){
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

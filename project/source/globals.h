@@ -37,6 +37,7 @@ static unsigned int DEBUG_HEIGHTMAP = 1;
 static unsigned int DEBUG_TERRAIN = 2;
 static unsigned int DEBUG_SHADOWMAP = 3;
 static unsigned int DEBUG_SKYBOX = 4;
+static unsigned int DEBUG_SCENE = 5;
 
 
 static unsigned int DEBUG = DEBUG_NOPE;

@@ -11,11 +11,8 @@
 #include "meshes/Bloom.h"
 #include "threecpp/Lights.h"
 #include "threecpp/Window.h"
-#include "_simple_fshader.h"
-#include "_simple_vshader.h"
 
-
-inline void createView(Window* window, Scene* scene, BufferCamera* camera){
+inline void createView(Window* window, Scene* scene, BufferCamera* camera, BufferCamera* gBufferCamera){
 
   /* HEIGHT MAP: START */
   Scene* heightmap = new Scene();
@@ -160,6 +157,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera){
   //scene->add(camera);
   // as buffer camera to the scene
   scene->addBufferToScene(camera);
+  //scene->addBufferToScene(gBufferCamera);
 
   window->registerScene(heightmap);
   window->registerScene(shadowmap);

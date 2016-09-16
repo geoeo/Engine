@@ -16,6 +16,8 @@ private:
   std::vector<BufferCamera*> buffers;
   std::vector<Light*> lights;
 
+  Model* debugScreen;
+
 public:
 
   static const int SCENE_SUCCESS = 1;

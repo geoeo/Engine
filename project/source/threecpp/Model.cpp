@@ -1,9 +1,5 @@
 #include "Model.h"
 
-#include "_simple_fshader.h"
-#include "_simple_vshader.h"
-#include "_texture_2d_fshader.h"
-
 Model::Model(Geometry* _geometry, Material* _material,bool _shouldSetData) {
   Mesh* mesh = new Mesh(_geometry, _material);
   meshes.push_back(mesh);

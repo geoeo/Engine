@@ -23,7 +23,13 @@ public:
   GLuint texture2; // optional second render target
   GLuint depthTexture;
 
+  // GBuffer Textures
+  GLuint gPosition;
+  GLuint gNormal;
+  GLuint gAlbedoSpec;
+
   void createFrameBuffer(GLsizei, GLsizei, bool isDepth = false, bool isBlur = false);
+  void createGBuffer(GLsizei width, GLsizei height);
 
   static BufferCamera* fromCamera(PerspectiveCamera*, bool);
 };

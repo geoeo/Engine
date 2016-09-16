@@ -16,19 +16,18 @@ int main(int, char**) {
 	// Create a camera
 	// Create scene camera with a texture as a render target
 	BufferCamera* camera = new BufferCamera(FOV, ASPECT, NEAR, FAR,false);
-	//camera->frameBuffer = 0;
 	camera->createFrameBuffer(1024, 768, false, true);
-	// There might be a more elegant way to do this
-	//camera->position = CAM_POS;
-	//camera->lookAt = CAM_LOOK;
-	//camera->up = CAM_UP;
-
 	camera->update();
 
+	BufferCamera* gBufferCamera = new BufferCamera(FOV, ASPECT, NEAR, FAR, false);
+	gBufferCamera->createGBuffer(1024, 768);
+	gBufferCamera->update();
+
 	window->registerCamera(camera);
+	window->registerCamera(gBufferCamera);
 
 	// Create a Scene
-	createView(window, scene, camera);
+	createView(window, scene, camera, gBufferCamera);
 
 	// Register the Scenes
 	window->registerScene(scene);

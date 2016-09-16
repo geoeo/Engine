@@ -5,6 +5,10 @@
 #include "Geometries.h"
 #include "Mesh.h"
 
+#include "_simple_fshader.h"
+#include "_simple_vshader.h"
+#include "_texture_2d_fshader.h"
+
 class Model : public Object {
 
 private:
