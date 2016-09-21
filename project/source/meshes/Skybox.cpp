@@ -1,10 +1,10 @@
 #include "Skybox.h"
 
-#include "_texture_vshader.h"
+#include "_texture_3d_vshader.h"
 #include "_texture_3d_fshader.h"
 
 Skybox::Skybox()
-	: Model(new BoxIndicesGeometry(), new Material(_texture_vshader, _texture_3d_fshader, NULL)) {
+	: Model(new BoxIndicesGeometry(), new Material(_texture_3d_vshader, _texture_3d_fshader, NULL)) {
 
   setup();
 }

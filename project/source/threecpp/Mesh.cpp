@@ -144,6 +144,7 @@ void Mesh::draw(GLuint frameBuffer, float _time, float _effect) {
   //glDepthMask(GL_TRUE);
 }
 
+
 void Mesh::setData(){
   glUseProgram(material->id);
 
@@ -163,6 +164,8 @@ void Mesh::setData(){
   glBindTexture(GL_TEXTURE_2D, material->textures[Material::NORMAL_TEXTURE_INDEX]);
 
   glUniform1i(glGetUniformLocation(material->id, "textureSamplerNormal"), 2);
+
+
 
   glUseProgram(CLEAR);
 }

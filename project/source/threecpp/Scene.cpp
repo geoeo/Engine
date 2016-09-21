@@ -35,9 +35,9 @@ int Scene::create() {
   // Accept fragment if it closer to the camera than the former one
   glDepthFunc(GL_LESS);
 
-  // Enable Transparency - TODO look at this. Atm this produces strange artifacts when enabled
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // Enable Transparency - Disabled since it produces artifacs in gBuffer textures
+  //glEnable(GL_BLEND);
+  //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -123,15 +123,13 @@ void Scene::update(const Event& e) {
 
   //DEBUG = DEBUG_SCENE;
   if (DEBUG == DEBUG_SCENE && cameras.size() > 0){
-	  BufferCamera* cam = (BufferCamera*)cameras[0];
-	  cam->Position = vec3(0.0f, 0.0f, 1.0f);
-	  cam->update();
-	  GLuint textureToDisplay = cam->texture;
+	  BufferCamera* cam = (BufferCamera*)cameras[1];
+	  GLuint textureToDisplay = cam->gPosition;
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;
-	  debugScreen->meshes[0]->material->setMVP(debugScreen->model, cam->model, cam->view, cam->projection);
+	  debugScreen->meshes[0]->material->setMVP(mat4::Identity(), mat4::Identity(), mat4::Identity(), mat4::Identity());
 	  debugScreen->meshes[0]->setData();
 	  debugScreen->meshes[0]->draw(0, currentTime);
 

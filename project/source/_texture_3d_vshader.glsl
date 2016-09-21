@@ -8,7 +8,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec3 fragUV;
+out vec3 fragUVCube;
 
 void main(){
   // Transform vertex position into homogeneous coordinates
@@ -17,5 +17,5 @@ void main(){
   // Transform vertex position into eye coordinates
   gl_Position = projection * view * model * oVertexPos;
 
-  fragUV = vertexPos;
+  fragUVCube = vertexPos;
 }

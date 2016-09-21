@@ -1,6 +1,6 @@
 #version 430 core
 
-in vec3 fragUV;
+in vec3 fragUVCube;
 
 uniform samplerCube cubeSampler;
 
@@ -10,7 +10,7 @@ layout (location = 1) out vec4 BrightColor;
 out vec4 outColor;
 
 void main(){
-    outColor = texture(cubeSampler, fragUV);
+    outColor = texture(cubeSampler, fragUVCube);
     float brightness = dot(outColor.xyz, vec3(0.2126, 0.7152, 0.0722));
     FragColor = outColor;
     if(brightness > 1) {
