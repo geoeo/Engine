@@ -123,13 +123,16 @@ void Scene::update(const Event& e) {
 
   //DEBUG = DEBUG_SCENE;
   if (DEBUG == DEBUG_SCENE && cameras.size() > 0){
-	  BufferCamera* cam = (BufferCamera*)cameras[1];
-	  GLuint textureToDisplay = cam->gPosition;
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	  BufferCamera* cam = (BufferCamera*)cameras[1];
+	  GLuint textureToDisplay = cam->gNormal;
+
 
 	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;
-	  debugScreen->meshes[0]->material->setMVP(mat4::Identity(), mat4::Identity(), mat4::Identity(), mat4::Identity());
+
+	  mat4 identity = mat4::Identity();
+	  debugScreen->meshes[0]->material->setMVP(identity, identity, identity, identity);
 	  debugScreen->meshes[0]->setData();
 	  debugScreen->meshes[0]->draw(0, currentTime);
 
@@ -157,8 +160,6 @@ void Scene::update(const Event& e) {
 	  glFlush();
 
   }
-
-
 }
 
 

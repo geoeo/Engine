@@ -26,6 +26,10 @@ uniform uint debugVisibility;
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
+layout (location = 2) out vec3 gPosition;
+layout (location = 3) out vec3 gNormal;
+layout (location = 4) out vec4 gAlbedoSpec;
+
 // Input data
 in float displacement;
 in vec2 fragUV;
@@ -152,7 +156,8 @@ void main() {
     //vec3 t_specular = globalLightIs*ks*fragColor * pow(max(dot(normalize(viewDirection), R), 0.0), p);
     
     vec3 R = normalize(2.0 * dot(fragNormalM, lightDir)*fragNormalM - lightDir);
-    vec3 t_specular = globalLightIs*ks*fragColor*pow(max(dot(normalize(camPos-fragVertexPos), R), 0.0), p);
+    float spec = pow(max(dot(normalize(camPos-fragVertexPos), R), 0.0), p);
+    vec3 t_specular = globalLightIs*ks*fragColor*spec;
 
     float visibility = 1.0;
     if (featureShadows == 1){
@@ -164,7 +169,11 @@ void main() {
     }
 
     outColor = vec4(t_ambient + t_diffuse *visibility + t_specular*visibility, 1.0);
-    
+    gPosition = fragVertexPos;
+    gNormal = fragNormalM;
+    gAlbedoSpec.rgb = t_ambient;
+    gAlbedoSpec.a = spec;
+
     if (debugVisibility == 1) {
         // DEBUG visibility
         outColor = vec4(vec3(visibility), 1.0);

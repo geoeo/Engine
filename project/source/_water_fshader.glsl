@@ -24,15 +24,22 @@ uniform uint debugReflection;
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
+layout (location = 2) out vec3 gPosition;
+layout (location = 3) out vec3 gNormal;
+layout (location = 4) out vec4 gAlbedoSpec;
+
 // Input data
-in vec2 fragUV;
-in vec3 fragVertexPos;
 in vec3 fragNormal;
-in vec3 fragNormalMV,fragNormalM;
+in vec3 fragNormalMV;
 in vec3 lightDirection, viewDirection;
 in vec4 ShadowCoord;
 in vec4 oLightPosM;
 in mat3 TBN;
+
+//gBufferValues
+in vec3 fragPos;
+in vec3 fragNormalM;
+in vec2 fragUV;
 
 // ShadowMap
 uniform sampler2DShadow shadowMap;
@@ -94,7 +101,7 @@ void main(){
     vec3 reflectColor = vec3(0.0,0.0,0.0);
     
     float waveFreq = 20.0;
-    float waveAmpl = 0.5;
+   float waveAmpl = 0.5;
     
 
    vec3 normal = texture(wavesMap, fragUV*waveFreq + time*0.05).xyz;
@@ -110,7 +117,7 @@ void main(){
 
     if (featureReflection == 1){
         float air_to_water_fresnel = 1.00 / 1.52;
-        vec3 I = normalize(camPos-fragVertexPos);
+        vec3 I = normalize(camPos-fragPos);
         vec3 R = reflect(I, normal);
         reflectColor = texture(cubeSampler, R).xyz;
 
@@ -121,7 +128,7 @@ void main(){
     //vec2 wavesSample = waveAmpl * texture(wavesMap, fragUV * waveFreq + 0.05).xy;
     //vec4 refractColor = texture(refractionObjects,(I.xy*2)-1) + vec4(0.2,0,0,0);
     
-    vec3 lightDir = normalize(globalLightPos- fragVertexPos);
+    vec3 lightDir = normalize(globalLightPos- fragPos);
 
     // compute ambient term
     vec3 t_ambient = 3*(globalLightIa*ka)*fragColor / 4;
@@ -135,7 +142,8 @@ void main(){
     //vec3 t_specular = globalLightIs*ks*fragColor * pow(max(dot(normalize(viewDirection), R), 0.0), p);
     
     vec3 R = normalize(2.0 * dot(normal, lightDir)*normal - lightDir);
-    vec3 t_specular = globalLightIs*ks*fragColor*pow(max(dot(normalize(camPos-fragVertexPos), R), 0.0), p);
+    float spec = pow(max(dot(normalize(camPos-fragPos), R), 0.0), p);
+    vec3 t_specular = globalLightIs*ks*fragColor*spec;
 
     float visibility = 1.0;
 
@@ -173,6 +181,11 @@ void main(){
     //FragColor = vec4(view[1][0],view[1][1],view[1][2],1.0);
     
     FragColor = outColor;
+
+    gPosition = fragPos;
+    gNormal = normal;
+    gAlbedoSpec.rgb = t_diffuse;
+    gAlbedoSpec.a = spec;
 
     float brightness = dot(outColor.xyz, vec3(0.2126, 0.5152, 0.0722));
     if(brightness > 0.6) {

@@ -15,13 +15,16 @@ uniform vec3 globalLightPos;
 uniform sampler2D wavesMap;
 
 out vec3 fragNormal;
-out vec3 fragNormalMV,fragNormalM;
-out vec3 fragVertexPos;
+out vec3 fragNormalMV;
 out vec3 lightDirection, viewDirection;
-out vec2 fragUV;
 out vec4 ShadowCoord;
 out vec4 oLightPosM;
 out mat3 TBN;
+
+// gBuffer Values
+out vec3 fragPos;
+out vec3 fragNormalM;
+out vec2 fragUV;
 
 void main(){
 
@@ -38,13 +41,10 @@ void main(){
   vec4 oVertexPosM = model * vec4(vertexPos, 1.0);
   vec4 oLightPosMV = model_view* vec4(globalLightPos, 1.0);
   vec4 oLightPosM = vec4(globalLightPos, 1.0);
+  fragPos = oVertexPosM.xyz;
 
   // Transform vertex position into eye coordinates
   gl_Position = projection * oVertexPosMV;
-
-  // Fragment position
-  //fragVertexPos = oVertexPosMV.xyz;
-  fragVertexPos = oVertexPosM.xyz;   
 
   ShadowCoord = lightOffsetMVP* model * vec4(vertexPos, 1.0);
 

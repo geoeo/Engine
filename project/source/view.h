@@ -82,7 +82,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 	window->registerBuffer(terrain->shadowMapBuffer);
      window->registerCamera(terrain->shadowMapBuffer);
     //printf("=====> Render: Terrain => Scene\n");
-   // scene->add(terrain);
+    scene->add(terrain);
   }
 
   shadow->heightMapBuffer = terrain->heightMapBuffer;
@@ -117,7 +117,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
   Model* obj = new Model(path);
   //obj->resetTranslation();
   //obj->scale(.1);
-  obj->translate(0, 0, 0);
+  obj->translate(0, 30, 170);
   scene->add(obj);
 
   string path_2 = __DIR__ + string("meshes/Shark.obj");

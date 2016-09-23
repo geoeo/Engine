@@ -73,7 +73,7 @@ void main(){
   fragNormalM = normalize(normal_matrix_2*fragNormal);
   
   // compute the light direction light_dir
-  lightDirection = oVertexPosM.xyz-oLightPosM.xyz;
+  lightDirection = normalize(oLightPosMV.xyz - oVertexPosMV.xyz);
 
   // compute the view direction view_dir
   viewDirection = normalize(-oVertexPosMV.xyz);
