@@ -184,7 +184,7 @@ void main(){
 
     gPosition = fragPos;
     gNormal = normal;
-    gAlbedoSpec.rgb = t_diffuse;
+    gAlbedoSpec.rgb = t_diffuse * visibility;
     gAlbedoSpec.a = spec;
 
     float brightness = dot(outColor.xyz, vec3(0.2126, 0.5152, 0.0722));
