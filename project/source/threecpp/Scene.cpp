@@ -126,7 +126,7 @@ void Scene::update(const Event& e) {
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	  BufferCamera* cam = (BufferCamera*)cameras[1];
-	  GLuint textureToDisplay = cam->gNormal;
+	  GLuint textureToDisplay = cam->gAlbedoSpec;
 
 
 	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;
@@ -150,7 +150,12 @@ void Scene::update(const Event& e) {
 		  for each (Mesh* mesh in postProcess[i]->meshes)
 		  {
 			  mesh->material->setMVP(postProcess[i]->model, postProcess[i]->model, postProcess[i]->model, postProcess[i]->model);
+			  // Set the light information
+			  for (unsigned l = 0; l < lights.size(); l++) {
+				  lights[l]->setData(mesh->material->id);
+			  }
 		  }
+
 		  postProcess[i]->setData();
 		  postProcess[i]->draw(0, currentTime);
 	  }

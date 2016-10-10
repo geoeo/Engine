@@ -9,6 +9,7 @@
 #include "meshes/Displacement.h"
 #include "meshes/Blur.h"
 #include "meshes/Bloom.h"
+#include "meshes/DeferredQuad.h"
 #include "threecpp/Lights.h"
 #include "threecpp/Window.h"
 
@@ -149,8 +150,10 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 
   Blur* blur = new Blur(camera);
   Bloom* bloom = new Bloom(camera, blur);
-  scene->addToPost(blur);
-  scene->addToPost(bloom);
+  DeferredQuad* dq = new DeferredQuad(gBufferCamera);
+  scene->addToPost(dq);
+  //scene->addToPost(blur);
+  //scene->addToPost(bloom);
   //scene->addToPost(shadow);
   //scene->addToPost(displacement);
   

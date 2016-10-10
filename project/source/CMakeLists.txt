@@ -24,6 +24,7 @@ set(SOURCES ${SOURCES}
   ${MESHES_DIR}/Displacement.cpp
   ${MESHES_DIR}/Blur.cpp
   ${MESHES_DIR}/Bloom.cpp
+  ${MESHES_DIR}/DeferredQuad.cpp
   ${SCENES_DIR}/MainScene.cpp
 )
 
@@ -103,3 +104,5 @@ target_stringify_shader(${DIR} _blur_fshader)
 target_stringify_shader(${DIR} _blur_vshader)
 target_stringify_shader(${DIR} _bloom_fshader)
 target_stringify_shader(${DIR} _bloom_vshader)
+target_stringify_shader(${DIR} _gBuffer_fshader)
+target_stringify_shader(${DIR} _pass_vshader)
