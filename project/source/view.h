@@ -70,7 +70,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 
   /* TERRAIN: START */
 
-  Terrain* terrain = new Terrain(camera);
+  Terrain* terrain = new Terrain(gBufferCamera);
   terrain->translate(0.0, -5.0, 0.0);
   terrain->scale(200);
 
@@ -96,7 +96,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 	scene->add(skybox);
   }
 
-  Water* water = new Water(camera, skybox);
+  Water* water = new Water(gBufferCamera, skybox);
   water->translate(0.0, 0.0, 0.0);
   water->scale(200);
 
@@ -148,18 +148,18 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 
   // Add blur as post effect material
 
-  Blur* blur = new Blur(camera);
-  Bloom* bloom = new Bloom(camera, blur);
+  Blur* blur = new Blur(gBufferCamera);
+  Bloom* bloom = new Bloom(gBufferCamera, blur);
   DeferredQuad* dq = new DeferredQuad(gBufferCamera);
   scene->addToPost(dq);
-  //scene->addToPost(blur);
-  //scene->addToPost(bloom);
+  scene->addToPost(blur);
+  scene->addToPost(bloom);
   //scene->addToPost(shadow);
   //scene->addToPost(displacement);
   
   //scene->add(camera);
   // as buffer camera to the scene
-  scene->addBufferToScene(camera);
+  //scene->addBufferToScene(camera);
   scene->addBufferToScene(gBufferCamera);
 
   window->registerScene(heightmap);

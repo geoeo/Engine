@@ -126,7 +126,7 @@ void Scene::update(const Event& e) {
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	  BufferCamera* cam = (BufferCamera*)cameras[1];
-	  GLuint textureToDisplay = cam->gAlbedoSpec;
+	  GLuint textureToDisplay = cam->texture2;
 
 
 	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;

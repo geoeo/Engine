@@ -27,7 +27,7 @@ void Blur::setup(Camera* sceneCamera,GLsizei width, GLsizei height) {
   {
     glBindFramebuffer(GL_FRAMEBUFFER, blurFBO[i]);
     glBindTexture(GL_TEXTURE_2D, blurColorbuffers[i]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Clamp to the edge as the blur filter would otherwise sample repeated texture values!

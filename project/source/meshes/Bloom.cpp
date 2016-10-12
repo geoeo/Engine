@@ -38,7 +38,7 @@ void Bloom::draw(GLuint frameBuffer, float _time, float _effect) {
 	glUniform1i(glGetUniformLocation(mat->id, "scene"), 0);
 	glUniform1i(glGetUniformLocation(mat->id, "bloomBlur"), 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _sceneCamera->texture);
+	glBindTexture(GL_TEXTURE_2D, _sceneCamera->gAlbedoSpec);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, _blurMesh->blurColorbuffers[!_blurMesh->horizontal]);
 

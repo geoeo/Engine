@@ -1,6 +1,5 @@
 #version 430 core
 
-out vec4 FragColor;
 in vec2 fragUV;
 
 uniform sampler2D gPosition;
@@ -9,6 +8,8 @@ uniform sampler2D gAlbedoSpec;
 
 uniform vec3 camPos;
 uniform vec3 lightPos;
+
+layout (location = 0) out vec4 FragColor;
 
 void main()
 {             
@@ -27,7 +28,7 @@ void main()
     vec3 diffuse = Albedo;
     vec3 spec = vec3(Specular,Specular,Specular);
     lighting += diffuse;
-    //lighting += spec;
+    lighting += spec;
 
 
     
