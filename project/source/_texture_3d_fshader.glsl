@@ -21,7 +21,7 @@ void main(){
     //gPosition = vec3(0,0,0);
     gNormal = vec3(0,0,0);
     gAlbedoSpec.rgb = outColor.rgb;
-    gAlbedoSpec.a = 0;
+    gAlbedoSpec.a = 0.0;
     if(brightness > 1) {
         BrightColor =  outColor;
     }

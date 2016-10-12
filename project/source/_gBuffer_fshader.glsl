@@ -19,14 +19,17 @@ void main()
     float Specular = texture(gAlbedoSpec, fragUV).a;
     
     // Then calculate lighting as usual
-    vec3 lighting = Albedo; // hard-coded ambient component
+    vec3 lighting = Albedo * 0.1; // hard-coded ambient component
     vec3 viewDir = normalize(camPos - FragPos);
 
     // Diffuse
     vec3 lightDir = normalize(lightPos - FragPos);
-    vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Albedo;
+    vec3 diffuse = Albedo;
+    vec3 spec = vec3(Specular,Specular,Specular);
     lighting += diffuse;
-    
+    //lighting += spec;
+
+
     
     FragColor = vec4(lighting, 1.0);
 } 

@@ -171,8 +171,8 @@ void main() {
     outColor = vec4(t_ambient + t_diffuse *visibility + t_specular*visibility, 1.0);
     gPosition = fragVertexPos;
     gNormal = fragNormalM;
-    gAlbedoSpec.rgb = t_ambient;
-    gAlbedoSpec.a = spec;
+    gAlbedoSpec.rgb = t_ambient; // * visibility;
+    gAlbedoSpec.a = 0; // globalLightIs.r * fragColor.r* spec *ks.r * visibility;
 
     if (debugVisibility == 1) {
         // DEBUG visibility

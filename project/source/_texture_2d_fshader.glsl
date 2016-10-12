@@ -31,6 +31,8 @@ void main() {
   gAlbedoSpec.a = MaterialSpecularCoeff.r;
   
   outColor = diffuseColor;
+  outColor = vec4(diffuseColor.a,diffuseColor.a,diffuseColor.a,1); // hack for visualising the specular coeff
+  //outColor = vec4(1,0,0,1);
   //FragColor = outColor;
   BrightColor = vec4(0,0,0,1);
 }
