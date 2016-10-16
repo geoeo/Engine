@@ -22,7 +22,7 @@ void DeferredQuad::setData(){
 
 	// Bind the material as texture
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _gBufferCamera->gPosition);
+	glBindTexture(GL_TEXTURE_2D, _gBufferCamera->gPositionDepth);
 	// Link material texture attribute
 	glUniform1i(glGetUniformLocation(mat->id, "gPosition"), 0);
 

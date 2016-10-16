@@ -27,8 +27,5 @@ void TerrainShadow::setData(){
   // Link material texture attribute
   glUniform1i(glGetUniformLocation(program, "heightMap"), 0);
 
-  GLuint lightMvpID = glGetUniformLocation(program, "lightMVP");
-  glUniformMatrix4fv(lightMvpID, ONE, DONT_TRANSPOSE, light->getMVP().data());
-
   glUseProgram(CLEAR);
 }

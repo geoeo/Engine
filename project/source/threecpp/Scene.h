@@ -27,6 +27,8 @@ public:
   double deltaTime = 0;
   bool toggleWireFrame = false;
 
+  GLuint shadowMap;
+
   // Constructor
   Scene();
 

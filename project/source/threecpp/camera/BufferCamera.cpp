@@ -44,7 +44,7 @@ GLuint BufferCamera::createTexture(GLsizei width, GLsizei height, bool isDepth) 
   glTexImage2D(
     GL_TEXTURE_2D,
     0,
-    (isDepth ? GL_DEPTH_COMPONENT32F : GL_RGB),
+    (isDepth ? GL_DEPTH_COMPONENT : GL_RGB),
     width,
     height,
     0,
@@ -54,8 +54,8 @@ GLuint BufferCamera::createTexture(GLsizei width, GLsizei height, bool isDepth) 
   );
 
   if (isDepth) {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     // Remove artifact on the edges of the shadowmap
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER_ARB );
@@ -133,7 +133,7 @@ void BufferCamera::createFrameBuffer(GLsizei width, GLsizei height, bool isDepth
   if (isDepth) {
     // No color output in the bound framebuffer, only depth.
     glDrawBuffer(GL_NONE);
-    //glReadBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
   }
 
   // Error Handling
@@ -169,12 +169,12 @@ void BufferCamera::createGBuffer(GLsizei width, GLsizei height){
 
 
 	// Position color buffer
-	glGenTextures(ONE, &gPosition);
-	glBindTexture(GL_TEXTURE_2D, gPosition);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glGenTextures(ONE, &gPositionDepth);
+	glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gPosition, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gPositionDepth, 0);
 
 	// Normal color buffer
 	glGenTextures(ONE, &gNormal);

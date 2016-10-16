@@ -50,7 +50,6 @@ void Scene::update(const Event& e) {
 
   deltaTime = event.time - currentTime;
   currentTime = event.time;
-
   // Draw all buffers
   for (unsigned b=0; b < buffers.size(); b++) {
     // Clear the canvas
@@ -125,8 +124,8 @@ void Scene::update(const Event& e) {
   if (DEBUG == DEBUG_SCENE && cameras.size() > 0){
 	  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	  BufferCamera* cam = (BufferCamera*)cameras[1];
-	  GLuint textureToDisplay = cam->texture2;
+	  BufferCamera* cam = (BufferCamera*)cameras[0];
+	  GLuint textureToDisplay = shadowMap;
 
 
 	  debugScreen->meshes[0]->material->textures[Material::DIFFUSE_TEXTURE_INDEX] = textureToDisplay;

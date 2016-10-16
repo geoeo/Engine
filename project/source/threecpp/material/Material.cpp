@@ -12,7 +12,18 @@ Material::Material(const char* vertexShader, const char* fragmentShader, const c
 }
 
 Material::~Material(){
+	glDeleteProgram(id);
+}
 
+void Material::rebindShaders(const char* vertexShader, const char* fragmentShader, const char* geometryShader){
+
+	glDeleteProgram(id);
+	id = compile_shaders(vertexShader, fragmentShader, geometryShader);
+
+	if (!id) {
+		// TODO: Would be great to have some proper error handling here
+		exit(EXIT_FAILURE);
+	}
 }
 
 void Material::setMVP(const mat4& object, const mat4& model, const mat4& view, const mat4& projection) {
@@ -30,6 +41,12 @@ void Material::setMVP(const mat4& object, const mat4& model, const mat4& view, c
   glUniformMatrix4fv(viewId, ONE, DONT_TRANSPOSE, view.data());
 
   glUseProgram(CLEAR);
+}
+
+void Material::bindShadowMappingShaders(){
+
+	rebindShaders(_shadow_vshader, _shadow_fshader,NULL);
+
 }
 
 GLuint Material::loadTexture(const char* fileName, bool isDepth, GLenum edge){

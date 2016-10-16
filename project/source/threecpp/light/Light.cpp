@@ -10,7 +10,7 @@ Light::Light(const char* _desc) {
 
   //projection = Eigen::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 1000.0f);
   //projection = Eigen::perspective(80.0f, ASPECT, NEAR, FAR);
-  projection = Eigen::ortho(-ASPECT, ASPECT, -1.0f, 1.0f, 0.1f, 5.0f);
+  projection = Eigen::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1000.0f);
  
 }
 
@@ -32,10 +32,6 @@ void Light::setData(GLuint id) {
   glUniform3fv(glGetUniformLocation(id, (string(descriptor) + "Id").data()), ONE, Id.data());
   glUniform3fv(glGetUniformLocation(id, (string(descriptor) + "Is").data()), ONE, Is.data());
 
-  // Compute the light lookup MVP
-  mat4 lightOffsetMVP;
-  lightOffsetMVP = /* offsetMatrix * */ getMVP();
-
-  GLuint lightOffsetMvpID = glGetUniformLocation(id, "lightOffsetMVP");
-  glUniformMatrix4fv(lightOffsetMvpID, ONE, DONT_TRANSPOSE, lightOffsetMVP.data());
+  GLuint lightOffsetMvpID = glGetUniformLocation(id, "lightMVP");
+  glUniformMatrix4fv(lightOffsetMvpID, ONE, DONT_TRANSPOSE, getMVP().data());
 }

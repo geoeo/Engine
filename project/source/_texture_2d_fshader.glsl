@@ -14,18 +14,28 @@ uniform sampler2D textureSamplerNormal;
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
-layout (location = 2) out vec3 gPosition;
+layout (location = 2) out vec4 gPosition;
 layout (location = 3) out vec3 gNormal;
 layout (location = 4) out vec4 gAlbedoSpec;
 
 out vec4 outColor;
+
+float near = 0.1f; 
+float far  = 1000.0; 
+  
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
+}
 
 void main() {
 
   vec4 diffuseColor = texture(textureSamplerDiffuse, fragUV);
   vec4 MaterialSpecularCoeff = texture(textureSamplerSpecular, fragUV);
 
-  gPosition = FragPos;
+  gPosition.rgb = FragPos;
+  gPosition.a = LinearizeDepth(gl_FragCoord.z)/far;
   gNormal = normalize(Normal);
   gAlbedoSpec.rgb = diffuseColor.rgb;
   gAlbedoSpec.a = MaterialSpecularCoeff.r;

@@ -20,6 +20,7 @@ set(SOURCES ${SOURCES}
   ${MESHES_DIR}/Water.cpp
   ${MESHES_DIR}/Terrain.cpp
   ${MESHES_DIR}/TerrainShadow.cpp
+  ${MESHES_DIR}/ShadowMap.cpp
   ${MESHES_DIR}/Mirror.cpp
   ${MESHES_DIR}/Displacement.cpp
   ${MESHES_DIR}/Blur.cpp
@@ -106,3 +107,5 @@ target_stringify_shader(${DIR} _bloom_fshader)
 target_stringify_shader(${DIR} _bloom_vshader)
 target_stringify_shader(${DIR} _gBuffer_fshader)
 target_stringify_shader(${DIR} _pass_vshader)
+target_stringify_shader(${DIR} _shadow_fshader)
+target_stringify_shader(${DIR} _shadow_vshader)

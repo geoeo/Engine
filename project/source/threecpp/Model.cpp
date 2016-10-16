@@ -1,18 +1,35 @@
 #include "Model.h"
 
-Model::Model(Geometry* _geometry, Material* _material,bool _shouldSetData) {
+Model::Model(Geometry* _geometry, Material* _material,bool _shouldSetData,bool createShadowMapCopy) {
   Mesh* mesh = new Mesh(_geometry, _material);
   meshes.push_back(mesh);
   shouldSetDataVal = _shouldSetData;
+  if (createShadowMapCopy){
+	  copyForShadowMapping = new Model(_geometry, _material, _shouldSetData, false);
+	  copyForShadowMapping->meshes[0]->material->bindShadowMappingShaders();
+  }
+
+  
 }
 
 Model::Model(string pathToMesh, bool _shouldSetData){
 	//material = new Material(_simple_vshader, _simple_fshader, NULL);
+	copyForShadowMapping = new Model(_shouldSetData);
 	loadModel(pathToMesh);
 	shouldSetDataVal = _shouldSetData;
+
 }
 
+Model::Model(bool _shouldSetDataVal){
+
+	shouldSetDataVal = _shouldSetDataVal;
+}
+
+
 Model::~Model() {
+	if (copyForShadowMapping != NULL)
+		copyForShadowMapping->~Model();
+
   for each (Mesh* mesh in meshes)
   {
 	  mesh->~Mesh();
@@ -31,6 +48,15 @@ void Model::setData(){
 	for each (Mesh* mesh in meshes)
 		mesh->setData();
 	
+}
+
+Model* Model::returnCopyForShadowMapping(){
+
+	// if meant to be shadowmapped should be set already
+	if (copyForShadowMapping != NULL)	
+		return copyForShadowMapping;
+
+	cout << "ERROR::Model:: showmap copy not set"  << endl;
 }
 
 void Model::loadModel(string path){
@@ -55,6 +81,7 @@ void Model::processNode(aiNode* node, const aiScene* scene){
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		meshes.push_back(generateMesh(mesh, scene));
+		copyForShadowMapping->meshes.push_back(generateMesh(mesh, scene,true));
 	}
 	// Then do the same for each of its children
 	for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -65,7 +92,7 @@ void Model::processNode(aiNode* node, const aiScene* scene){
 }
 
 // TODO: Refactor this and optmize Geometry to use strcts
-Mesh* Model::generateMesh(aiMesh* mesh, const aiScene* scene){
+Mesh* Model::generateMesh(aiMesh* mesh, const aiScene* scene, bool forShadowMapping){
 
 	vector<vec3> verticies;
 	vector<vec3> normals;
@@ -74,7 +101,19 @@ Mesh* Model::generateMesh(aiMesh* mesh, const aiScene* scene){
 	vector <vec3> biTangents;
 	vector<GLuint> indices;
 
-	Material* material = new Material(_simple_vshader, _texture_2d_fshader, NULL);
+	const char * vshader;
+	const char * fshader;
+
+	if (forShadowMapping){
+		vshader = _shadow_vshader;
+		fshader = _shadow_fshader;
+	}
+	else{
+		vshader = _simple_vshader;
+		fshader = _texture_2d_fshader;
+	}
+
+	Material* material = new Material(vshader, fshader, NULL);
 
 	//Process Verticies & Normals & Texture coordiantes
 	for (GLuint i = 0; i < mesh->mNumVertices; i++)
@@ -119,7 +158,7 @@ Mesh* Model::generateMesh(aiMesh* mesh, const aiScene* scene){
 	}
 
 	// parse imported mesh's material
-	if (mesh->mMaterialIndex >= 0)
+	if (mesh->mMaterialIndex >= 0 && !forShadowMapping)
 	{
 		aiMaterial* meshMat = scene->mMaterials[mesh->mMaterialIndex];
 		aiTextureType type = aiTextureType_DIFFUSE;

@@ -24,7 +24,7 @@ public:
   GLuint depthTexture;
 
   // GBuffer Textures
-  GLuint gPosition;
+  GLuint gPositionDepth;
   GLuint gNormal;
   GLuint gAlbedoSpec;
 

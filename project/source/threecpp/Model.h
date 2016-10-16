@@ -14,14 +14,18 @@ class Model : public Object {
 private:
 
 	bool shouldSetDataVal;
+	Model* Copy();
+	Model(bool _shouldSetDataVal);
 
 public:
-  vector<Mesh*> meshes;
 
+  Model* copyForShadowMapping = NULL;
+
+  vector<Mesh*> meshes;
   bool isTexture = false;
 
   // Constructor
-  Model(Geometry*, Material*, bool _shouldSetData = true);
+  Model(Geometry*, Material*, bool _shouldSetData = true, bool createShadowMapCopy = false);
   Model(string pathToMesh, bool _shouldSetData= false);
 
   // Destructor
@@ -31,7 +35,8 @@ public:
   virtual void setData();
   void loadModel(string path);
   void processNode(aiNode* node, const aiScene* scene);
-  Mesh* generateMesh(aiMesh* mesh, const aiScene* scene);
+  Mesh* generateMesh(aiMesh* mesh, const aiScene* scene, bool forShadowMapping = false);
   bool shouldSetData(){ return shouldSetDataVal; }
+  Model* returnCopyForShadowMapping(); // returns a copy of the model without any of the textures.
  
 };

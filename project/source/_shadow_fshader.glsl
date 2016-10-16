@@ -1,7 +1,6 @@
 #version 430 core
 
- layout(location = 0) out float fragDepth;
- in float heightMapVal;
+layout(location = 0) out float fragDepth;
 
  void main(){
    //fragDepth = gl_FragCoord.z;

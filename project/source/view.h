@@ -51,6 +51,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
 
   /* TERRAIN SHADOW: START */
   Scene* shadowmap = new Scene();
+  shadowmap->add(light);
   TerrainShadow* shadow = new TerrainShadow(camera, light);
   shadow->translate(0.0, -5.0, 0.0);
   shadow->scale(200);
@@ -63,7 +64,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
   }
   else {
     printf("=====> Render: TerrainShadow => Shadowmap\n");
-    shadowmap->add(shadow);
+    //shadowmap->add(shadow);
   }
   /* TERRAIN SHADOW: END */
 
@@ -81,9 +82,9 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
     //printf("=====> Buffer: Shadowmap => Terrain::shadowMapBuffer\n");
     shadowmap->add(terrain->shadowMapBuffer);
 	window->registerBuffer(terrain->shadowMapBuffer);
-     window->registerCamera(terrain->shadowMapBuffer);
+     //window->registerCamera(terrain->shadowMapBuffer);
     //printf("=====> Render: Terrain => Scene\n");
-    scene->add(terrain);
+    //scene->add(terrain);
   }
 
   shadow->heightMapBuffer = terrain->heightMapBuffer;
@@ -104,22 +105,27 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
   if (DEBUG == DEBUG_TERRAIN || !DEBUG){
     printf("=====> Buffer: Shadowmap => Water::shadowMapBuffer\n");
     shadowmap->add(water->shadowMapBuffer);
-	window->registerBuffer(terrain->shadowMapBuffer);
+	window->registerBuffer(water->shadowMapBuffer);
     printf("=====> Render: Water => Scene\n");
     scene->add(water);
   }
 
   /* TERRAIN: END */
 
-  Model* box = new Model(new BoxIndicesGeometry(), new Material(_simple_vshader, _simple_fshader, NULL));
+  Model* box = new Model(new BoxIndicesGeometry(), new Material(_simple_vshader, _simple_fshader, NULL),true,true);
+  box->scale(5);
+  box->translate(0, 50, 0);
   //scene->add(box);
+  //shadowmap->add(box->copyForShadowMapping);
 
   string path = __DIR__ + string("resources/nanosuit/nanosuit.obj");
   Model* obj = new Model(path);
   //obj->resetTranslation();
   //obj->scale(.1);
   obj->translate(0, 30, 170);
+  obj->copyForShadowMapping->translate(0, 30, 170);
   scene->add(obj);
+  shadowmap->add(obj->copyForShadowMapping);
 
   string path_2 = __DIR__ + string("meshes/Shark.obj");
   //Model* shark = new Model(path_2);
@@ -145,6 +151,7 @@ inline void createView(Window* window, Scene* scene, BufferCamera* camera, Buffe
   // // scene->add(mirror->reflection);
 
 
+  scene->shadowMap = water->shadowMapBuffer->texture;
 
   // Add blur as post effect material
 

@@ -26,7 +26,7 @@ uniform uint debugVisibility;
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
-layout (location = 2) out vec3 gPosition;
+layout (location = 2) out vec4 gPosition;
 layout (location = 3) out vec3 gNormal;
 layout (location = 4) out vec4 gAlbedoSpec;
 
@@ -41,6 +41,14 @@ in vec4 oLightPosM;
 
 out vec4 outColor;
 
+float near = 0.1f; 
+float far  = 1000.0; 
+  
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
+}
 
 // Soft Shadows
 // @src: http://www.learnopengl.com/#!Advanced-Lighting/Shadows/Shadow-Mapping
@@ -69,7 +77,7 @@ float simpleShadow(vec3 offset, float bias) {
 }
 
 float smoothShadow(vec3 normal, vec3 lightDir) {
-    float bias = max(0.85 * (1.0 - dot(normal, lightDir)), 0.005);
+    float bias = max(3.25 * (1.0 - dot(normal, lightDir)), 0.3);
     float visibility = 1.0;
     float shadow = 0.0;
 
@@ -160,18 +168,19 @@ void main() {
     vec3 t_specular = globalLightIs*ks*fragColor*spec;
 
     float visibility = 1.0;
-    if (featureShadows == 1){
-        visibility = simpleShadow(vec3(0.0), 1e-6);
+    //if (featureShadows == 1){
+     //   visibility = simpleShadow(vec3(0.0), 1e-6);
 
-        if (featureSmoothShadows == 1){
+      //  if (featureSmoothShadows == 1){
             visibility = 1.0 - smoothShadow(fragNormalM,lightDir);
-        }
-    }
+       // }
+   // }
 
     outColor = vec4(t_ambient + t_diffuse *visibility + t_specular*visibility, 1.0);
-    gPosition = fragVertexPos;
+    gPosition.rgb = fragVertexPos;
+    gPosition.a = LinearizeDepth(gl_FragCoord.z)/far;
     gNormal = fragNormalM;
-    gAlbedoSpec.rgb = t_ambient; // * visibility;
+    gAlbedoSpec.rgb = t_ambient * visibility;
     gAlbedoSpec.a = 0; // globalLightIs.r * fragColor.r* spec *ks.r * visibility;
 
     if (debugVisibility == 1) {

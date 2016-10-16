@@ -24,7 +24,7 @@ uniform uint debugReflection;
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
 
-layout (location = 2) out vec3 gPosition;
+layout (location = 2) out vec4 gPosition;
 layout (location = 3) out vec3 gNormal;
 layout (location = 4) out vec4 gAlbedoSpec;
 
@@ -46,6 +46,16 @@ uniform sampler2DShadow shadowMap;
 
 // Ouput data
 out vec4 outColor;
+
+float near = 0.1f; 
+float far  = 1000.0f; 
+  
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
+}
+
 
 // Soft Shadows
 // @src: http://www.learnopengl.com/#!Advanced-Lighting/Shadows/Shadow-Mapping
@@ -182,7 +192,8 @@ void main(){
     
     FragColor = outColor;
 
-    gPosition = fragPos;
+    gPosition.rgb = fragPos;
+    gPosition.a = LinearizeDepth(gl_FragCoord.z)/far;
     gNormal = normal;
     gAlbedoSpec.rgb = t_diffuse * visibility;
     gAlbedoSpec.a = globalLightIs.r*ks.r*fragColor.r *spec * visibility;

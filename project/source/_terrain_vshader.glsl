@@ -7,7 +7,7 @@ layout(location = 3) in vec3 vertexColor;
 layout(location = 4) in vec3 vertexTangent;
 
 uniform mat4 model, view, projection;
-uniform mat4 lightOffsetMVP;
+uniform mat4 lightMVP;
 uniform vec3 globalLightPos;
 
 uniform sampler2D heightMap;
@@ -85,7 +85,7 @@ void main(){
   //fragVertexPos = oVertexPosMV.xyz;
   fragVertexPos = oVertexPosM.xyz;
 
-  ShadowCoord = lightOffsetMVP * model * vec4(vertexPosDisplaced, 1.0);
+  ShadowCoord = lightMVP * model * vec4(vertexPosDisplaced, 1.0);
 
   // Transform vertex position into eye coordinates
   gl_Position = projection * oVertexPosMV;

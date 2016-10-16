@@ -9,7 +9,7 @@ layout(location = 5) in vec3 vertexBitangent;
 
 uniform float time;
 uniform mat4 model, view, projection;
-uniform mat4 lightOffsetMVP;
+uniform mat4 lightMVP;
 uniform vec3 globalLightPos;
 
 uniform sampler2D wavesMap;
@@ -46,7 +46,7 @@ void main(){
   // Transform vertex position into eye coordinates
   gl_Position = projection * oVertexPosMV;
 
-  ShadowCoord = lightOffsetMVP* model * vec4(vertexPos, 1.0);
+  ShadowCoord = lightMVP* model * vec4(vertexPos, 1.0);
 
   // Load the offset normal from the normalmap
   float waveFreq = 20.0;
